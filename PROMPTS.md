@@ -30,16 +30,39 @@ Menghapus komponen CatatanBelumAktif.
 ## US-02 Detail produk
 
 **Prompt:**
+Baca docs/user-stories.md bagian US-02.
+
+Ubah app/produk/[id]/page.jsx supaya mengambil satu produk dari tabel "produk" di Supabase berdasarkan id di URL, di sisi server, memakai koneksi Supabase yang sudah dibuat di lib/supabase. Kalau produk tidak ditemukan, panggil notFound(). Jangan ubah tampilannya. Hapus CatatanBelumAktif dari halaman ini, tapi biarkan tombol WhatsApp.
 
 **Hasil:**
+Sesuai dengan kriteria selesai US-02, halaman detail produk telah diperbarui:
+
+File yang Diubah
+app/produk/[id]/page.jsx:
+Mengambil data satu produk dari tabel produk di Supabase berdasarkan parameter id URL di sisi server menggunakan createServerClient dari lib/supabase.
+Memanggil notFound() jika produk tidak ditemukan di database atau jika format id tidak valid.
+Menghapus komponen CatatanBelumAktif.
+Mempertahankan tampilan halaman serta komponen TombolWhatsApp.
 
 **Perbaikan:**
 
 ## US-03 Pesan via WhatsApp
 
 **Prompt:**
+Baca docs/rancangan-teknis.md bagian "Pesan WhatsApp (US-03)".
+
+Ubah components/TombolWhatsApp.jsx menjadi tautan yang membuka https://wa.me/ ke nomor di lib/toko.js, dengan pesan otomatis berisi nama dan harga produk dalam format rupiah. Pesan di-encode dengan encodeURIComponent dan dibuka di tab baru. Pertahankan tampilan tombolnya. Hapus CatatanBelumAktif yang menyebut US-03 di halaman detail produk.
 
 **Hasil:**
+Sesuai bagian "Pesan WhatsApp (US-03)" pada docs/rancangan-teknis.md dan kriteria US-03, pembaruan telah selesai dilakukan:
+
+File yang Diubah
+components/TombolWhatsApp.jsx:
+Mengubah elemen <button> menjadi elemen <a> (tautan) dengan mempertahankan seluruh styling tombol (kelas Tailwind).
+Tautan mengarah ke https://wa.me/<nomor>?text=<pesan> menggunakan nomor dari lib/toko.js.
+Pesan otomatis memuat nama dan harga produk (dalam format rupiah) yang di-encode menggunakan encodeURIComponent.
+Membuka tautan di tab baru dengan atribut target="_blank" dan rel="noopener noreferrer".
+Memastikan komponen CatatanBelumAktif tidak ada pada halaman detail produk (app/produk/[id]/page.jsx).
 
 **Perbaikan:**
 
