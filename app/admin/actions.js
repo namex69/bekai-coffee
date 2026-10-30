@@ -3,6 +3,24 @@
 import { redirect } from "next/navigation";
 import { createAuthClient } from "@/lib/supabase/auth";
 
+/**
+ * Memeriksa apakah admin sedang login di server.
+ * Wajib digunakan di setiap aksi yang mengubah data (aturan keamanan #3).
+ */
+export async function verifikasiAdmin() {
+  const supabase = await createAuthClient();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    throw new Error("Akses ditolak: Admin belum login.");
+  }
+
+  return { supabase, user };
+}
+
 export async function login(prevStateOrFormData, maybeFormData) {
   const formData = maybeFormData instanceof FormData ? maybeFormData : prevStateOrFormData;
   const email = formData?.get ? formData.get("email")?.toString().trim() : "";
@@ -67,12 +85,8 @@ export async function gantiPassword(prevStateOrFormData, maybeFormData) {
 
   let updateError = null;
   try {
-    const supabase = await createAuthClient();
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      return { error: "Sesi tidak valid atau belum login." };
-    }
+    // Aturan keamanan #3: periksa sesi admin di server
+    const { supabase } = await verifikasiAdmin();
 
     const { error } = await supabase.auth.updateUser({
       password: passwordBaru,
